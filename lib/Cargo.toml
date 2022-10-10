@@ -5,4 +5,4 @@ authors = ["MrMcEpic <45011453+MrMcEpic@users.noreply.github.com>"]
 edition = "2018"
 
 [dependencies]
-my_error = {path = "../my_error"}
+custom_error = {path = "../custom_error"}
