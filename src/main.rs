@@ -8,15 +8,16 @@ fn main() {
         process::exit(0);
     });
 
-    let data = Data::get_nums(&input).unwrap_or_else(|err| {
+    let mut data = Data::initalize(&input).unwrap_or_else(|err| {
         println!("There was a fatal error! {}", err);
         process::exit(0);
     });
 
-    let value = data.do_math().unwrap_or_else(|err| {
+    data.do_math().unwrap_or_else(|err| {
         println!("There was a fatal error! {}", err);
         process::exit(0);
     });
+
     if env::var("debug").is_ok() {
         println!("input: {}", input);
         println!(
@@ -24,15 +25,16 @@ fn main() {
             data.num_1, data.operator, data.num_2
         );
     }
+
     if data.num_2.is_some() {
         println!(
             "{} {} {} = {}",
             data.num_1,
             data.operator,
             data.num_2.unwrap(),
-            value
+            data.value.unwrap()
         );
     } else {
-        println!("{}{} = {}", data.operator, data.num_1, value);
+        println!("{}{} = {}", data.operator, data.num_1, data.value.unwrap());
     }
 }

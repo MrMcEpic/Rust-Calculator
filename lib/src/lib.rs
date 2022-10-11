@@ -5,11 +5,13 @@ pub struct Data {
     pub num_1: f64,
     pub operator: char,
     pub num_2: Option<f64>,
+    pub value: Option<f64>,
 }
 
 impl Data {
-    pub fn do_math(&self) -> Result<f64, Box<dyn Error>> {
-        Ok(if let Some(num_2) = &self.num_2 {
+    ///Handles the math logic and returns a [`f64`] wrapped in a [`Result`].
+    pub fn do_math(&mut self) -> Result<f64, Box<dyn Error>> {
+        let value = if let Some(num_2) = &self.num_2 {
             match &self.operator {
                 '+' => &self.num_1 + num_2,
                 '-' => &self.num_1 - num_2,
@@ -28,7 +30,9 @@ impl Data {
                 'f' => self.fibonacci(self.num_1),
                 _ => return Err(CustomError::new("Decoding Error")),
             }
-        })
+        };
+        self.value = Some(value);
+        Ok(value)
     }
     fn factorial(&self, x: f64) -> f64 {
         //Only works for positive whole numbers for now.
@@ -48,7 +52,7 @@ impl Data {
             self.fibonacci(x - 1.0) + self.fibonacci(x - 2.0)
         }
     }
-    pub fn get_nums(input: &str) -> Result<Data, Box<dyn Error>> {
+    fn get_nums(input: &str) -> Result<(f64, char, Option<f64>), Box<dyn Error>> {
         let mut num_holder: String = String::new();
         let mut num_holder_2: String = String::new();
         let mut num_holder_2_to_send: Option<f64> = None;
@@ -84,7 +88,7 @@ impl Data {
                 }
             }
         }
-        let operator = if let Some(c) = operator {
+        let operator: char = if let Some(c) = operator {
             if let '+' | '-' | '*' | 'x' | '^' | '/' | '%' | '!' | 'f' = c {
                 if c != '!' && c != 'f' {
                     num_holder_2_to_send = Some(num_holder_2.trim().parse()?);
@@ -96,21 +100,23 @@ impl Data {
         } else {
             return Err(CustomError::new("No Operator"));
         };
-        Ok(Data::new(
-            num_holder.trim().parse()?,
-            operator,
-            num_holder_2_to_send,
-        ))
+        Ok((num_holder.trim().parse()?, operator, num_holder_2_to_send))
     }
-    fn new(num_1: f64, operator: char, num_2: Option<f64>) -> Data {
+    ///Takes a user input [`str`] and returns a [`Data`] struct wrapped in a [`Result`].
+    pub fn initalize(input: &str) -> Result<Data, Box<dyn Error>> {
+        Ok(Data::new(Data::get_nums(input)?))
+    }
+    fn new((num_1, operator, num_2): (f64, char, Option<f64>)) -> Data {
         Data {
             num_1,
             operator,
             num_2,
+            value: None,
         }
     }
 }
 
+///Gets user input from the terminal and returns it as a [`String`] wrapped in a [`Result`].
 pub fn get_input() -> Result<String, Box<dyn Error>> {
     println!("Input simple math");
     let mut input = String::new();
