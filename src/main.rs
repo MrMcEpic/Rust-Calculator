@@ -5,17 +5,17 @@ pub use std::process;
 fn main() {
     let input = get_input().unwrap_or_else(|err| {
         println!("There was a fatal error! {}", err);
-        process::exit(1);
+        process::exit(0);
     });
 
-    let data = get_nums(&input).unwrap_or_else(|err| {
+    let data = Data::get_nums(&input).unwrap_or_else(|err| {
         println!("There was a fatal error! {}", err);
-        process::exit(1);
+        process::exit(0);
     });
 
-    let value = do_math(&data).unwrap_or_else(|err| {
+    let value = data.do_math().unwrap_or_else(|err| {
         println!("There was a fatal error! {}", err);
-        process::exit(1);
+        process::exit(0);
     });
     if env::var("debug").is_ok() {
         println!("input: {}", input);
