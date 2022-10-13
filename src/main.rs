@@ -1,22 +1,13 @@
 use lib::*;
 pub use std::env;
-pub use std::process;
 
 fn main() {
-    let input = get_input().unwrap_or_else(|err| {
-        println!("There was a fatal error! {}", err);
-        process::exit(0);
-    });
+    let input = get_input().unwrap_or_else(|err| CustomError::state_error(err));
 
-    let mut data = Data::initalize(&input).unwrap_or_else(|err| {
-        println!("There was a fatal error! {}", err);
-        process::exit(0);
-    });
+    let mut data = Data::initalize(&input).unwrap_or_else(|err| CustomError::state_error(err));
 
-    data.do_math().unwrap_or_else(|err| {
-        println!("There was a fatal error! {}", err);
-        process::exit(0);
-    });
+    data.do_math()
+        .unwrap_or_else(|err| CustomError::state_error(err));
 
     if env::var("debug").is_ok() {
         println!("input: {}", input);

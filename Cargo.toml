@@ -1,8 +1,8 @@
 [package]
 name = "calc"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["MrMcEpic <45011453+MrMcEpic@users.noreply.github.com>"]
 edition = "2018"
 
 [dependencies]
-lib = {path = "./lib"}
+lib = { path = "./lib" }

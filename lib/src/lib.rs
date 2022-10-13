@@ -34,6 +34,7 @@ impl Data {
         self.value = Some(value);
         Ok(value)
     }
+
     fn factorial(&self, x: f64) -> f64 {
         //Only works for positive whole numbers for now.
         if x == 0.0 {
@@ -42,6 +43,7 @@ impl Data {
             x * self.factorial(x - 1.0)
         }
     }
+
     fn fibonacci(&self, x: f64) -> f64 {
         //Only works for positive whole numbers for now.
         if x == 0.0 {
@@ -52,13 +54,14 @@ impl Data {
             self.fibonacci(x - 1.0) + self.fibonacci(x - 2.0)
         }
     }
+
     fn get_nums(input: &str) -> Result<(f64, char, Option<f64>), Box<dyn Error>> {
         let mut num_holder: String = String::new();
         let mut num_holder_2: String = String::new();
         let mut num_holder_2_to_send: Option<f64> = None;
         let mut operator: Option<char> = None;
         let mut switched: bool = false;
-        let mut op_checked: bool = false;
+        let mut operator_checked: bool = false;
         let mut active_quotes: bool = false;
         for c in input.chars() {
             if c == '"' || c == '\'' {
@@ -77,17 +80,26 @@ impl Data {
                 } else {
                     num_holder_2.push('-');
                 }
-            } else if !op_checked {
-                if c == '!' || c == 'f' {
-                    operator = Some(c);
-                    op_checked = true;
-                } else if c != ' ' {
+            } else if !operator_checked
+                && (c == '+'
+                    || c == '-'
+                    || c == '*'
+                    || c == 'x'
+                    || c == '/'
+                    || c == '^'
+                    || c == '%'
+                    || c == '!'
+                    || c == 'f')
+            {
+                //TODO Make a static array/tuple containting all of the valid operators
+                if c != '!' && c != 'f' {
                     switched = true;
-                    op_checked = true;
-                    operator = Some(c);
                 }
+                operator_checked = true;
+                operator = Some(c);
             }
         }
+
         let operator: char = if let Some(c) = operator {
             if let '+' | '-' | '*' | 'x' | '^' | '/' | '%' | '!' | 'f' = c {
                 if c != '!' && c != 'f' {
@@ -100,12 +112,16 @@ impl Data {
         } else {
             return Err(CustomError::new("No Operator"));
         };
+
         Ok((num_holder.trim().parse()?, operator, num_holder_2_to_send))
     }
+
     ///Takes a user input [`str`] and returns a [`Data`] struct wrapped in a [`Result`].
     pub fn initalize(input: &str) -> Result<Data, Box<dyn Error>> {
         Ok(Data::new(Data::get_nums(input)?))
     }
+
+    ///Takes a [`f64`], [`char`], and [`Option<f64>`] and returns a [`Data`] struct.
     fn new((num_1, operator, num_2): (f64, char, Option<f64>)) -> Data {
         Data {
             num_1,
