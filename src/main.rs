@@ -1,26 +1,29 @@
 use lib::*;
 pub use std::env;
 
-fn env_get() -> String {
+fn env_get() -> (String, bool) {
     let mut args: Vec<String> = env::args().collect();
+    let mut debug: bool = false;
     args.remove(0);
     let mut input: String = String::new();
     for i in args {
         if i != "debug" {
             input.push_str(&i);
+        } else {
+            debug = true;
         }
     }
-    input
+    (input, debug)
 }
 
 fn main() {
-    let input = env_get();
+    let (input, debug) = env_get();
     let mut data = Data::initalize(&input).unwrap_or_else(|err| CustomError::state_error(err));
 
     data.do_math()
         .unwrap_or_else(|err| CustomError::state_error(err));
 
-    if env::var("debug").is_ok() {
+    if debug {
         println!("input: {}", input);
         println!(
             "num 1: {}\nop: {}\nnum 2: {:?}",
