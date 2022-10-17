@@ -1,7 +1,7 @@
 use lib::*;
 pub use std::env;
 
-fn enver() {
+fn env_get() -> String {
     let mut args: Vec<String> = env::args().collect();
     args.remove(0);
     let mut input: String = String::new();
@@ -10,6 +10,11 @@ fn enver() {
             input.push_str(&i);
         }
     }
+    input
+}
+
+fn main() {
+    let input = env_get();
     let mut data = Data::initalize(&input).unwrap_or_else(|err| CustomError::state_error(err));
 
     data.do_math()
@@ -34,8 +39,4 @@ fn enver() {
     } else {
         println!("{}{} = {}", data.operator, data.num_1, data.value.unwrap());
     }
-}
-
-fn main() {
-    enver();
 }
