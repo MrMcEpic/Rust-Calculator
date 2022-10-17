@@ -9,4 +9,4 @@ The calculator takes input from the terminal and performs basic arithmetic opera
 
 - [x] Add support for more operations
 - [ ] Allow for multiple operations in one line
-- [ ] Allow exe to take command line arguments
+- [x] Allow exe to take command line arguments
