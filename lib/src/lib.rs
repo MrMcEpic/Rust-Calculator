@@ -11,21 +11,21 @@ pub struct Data {
 impl Data {
     ///Handles the math logic and returns a [`f64`] wrapped in a [`Result`].
     pub fn do_math(&mut self) -> Result<f64, Box<dyn Error>> {
-        let value = if let Some(num_2) = &self.num_2 {
-            match &self.operator {
-                '+' => &self.num_1 + num_2,
-                '-' => &self.num_1 - num_2,
-                '*' | 'x' => &self.num_1 * num_2,
-                '/' => &self.num_1 / num_2,
-                '^' => self.num_1.powf(*num_2),
-                '%' => &self.num_1 % num_2,
+        let value = if let Some(num_2) = self.num_2 {
+            match self.operator {
+                '+' => self.num_1 + &num_2,
+                '-' => self.num_1 - num_2,
+                '*' | 'x' => self.num_1 * num_2,
+                '/' => self.num_1 / num_2,
+                '^' => self.num_1.powf(num_2),
+                '%' => self.num_1 % num_2,
                 _ => return Err(CustomError::new("Decoding Error")),
             }
         } else {
-            if self.num_1 < 0.0 || &self.num_1 % 1.0 != 0.0 {
+            if self.num_1 < 0.0 || self.num_1 % 1.0 != 0.0 {
                 return Err(CustomError::new("Invalid Number"));
             }
-            match &self.operator {
+            match self.operator {
                 '!' => self.factorial(self.num_1),
                 'f' => self.fibonacci(self.num_1),
                 _ => return Err(CustomError::new("Decoding Error")),
