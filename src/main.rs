@@ -1,9 +1,15 @@
 use lib::*;
 pub use std::env;
 
-fn main() {
-    let input = get_input().unwrap_or_else(|err| CustomError::state_error(err));
-
+fn enver() {
+    let mut args: Vec<String> = env::args().collect();
+    args.remove(0);
+    let mut input: String = String::new();
+    for i in args {
+        if i != "debug" {
+            input.push_str(&i);
+        }
+    }
     let mut data = Data::initalize(&input).unwrap_or_else(|err| CustomError::state_error(err));
 
     data.do_math()
@@ -28,4 +34,8 @@ fn main() {
     } else {
         println!("{}{} = {}", data.operator, data.num_1, data.value.unwrap());
     }
+}
+
+fn main() {
+    enver();
 }
