@@ -8,6 +8,19 @@ pub struct Data {
     pub value: Option<f64>,
 }
 
+macro_rules! get_nums {
+    ($($a:expr, $b:expr, $c:expr), *) => {
+		let mut list = Vec::new();
+		$(
+			let num_1 = $a;
+			let operator = $b;
+			let num_2 = $c;
+			list.push(Data::new(num_1, operator, num_2));
+		)*
+		list
+	};
+}
+
 impl Data {
     ///Handles the math logic and returns a [`f64`] wrapped in a [`Result`].
     pub fn do_math(&mut self) -> Result<f64, Box<dyn Error>> {
@@ -139,4 +152,23 @@ pub fn get_input() -> Result<String, Box<dyn Error>> {
     io::stdin().read_line(&mut input)?;
     input = input.trim().to_lowercase().to_string();
     Ok(input)
+}
+
+fn seperator(input: &str) {
+    //Maybe make an enum that has a tuple option that holds the numbers so that there can be a proper list of the numbers
+    let mut counter = 0;
+    let mut holder = String::new();
+    let mut list: Vec<String> = Vec::new();
+    for i in input.chars() {
+        if let '+' | '-' | '*' | 'x' | '^' | '/' | '%' | '!' | 'f' = i {
+            counter += 1;
+        }
+        if counter % 2 == 0 {
+            list.push(holder);
+            holder = String::new();
+            counter = 0;
+        } else {
+            holder.push(i);
+        }
+    }
 }
