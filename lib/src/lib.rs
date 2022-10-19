@@ -8,18 +8,18 @@ pub struct Data {
     pub value: Option<f64>,
 }
 
-macro_rules! _get_nums {
-    ($($a:expr, $b:expr, $c:expr), *) => {
-		let mut list = Vec::new();
-		$(
-			let num_1 = $a;
-			let operator = $b;
-			let num_2 = $c;
-			list.push(Data::new(num_1, operator, num_2));
-		)*
-		list
-	};
-}
+// macro_rules! _get_nums {
+//     ($($a:expr, $b:expr, $c:expr), *) => {
+// 		let mut list = Vec::new();
+// 		$(
+// 			let num_1 = $a;
+// 			let operator = $b;
+// 			let num_2 = $c;
+// 			list.push(Data::new(num_1, operator, num_2));
+// 		)*
+// 		list
+// 	};
+// }
 
 impl Data {
     ///Handles the math logic and returns a [`f64`] wrapped in a [`Result`].
@@ -154,21 +154,21 @@ pub fn get_input() -> Result<String, Box<dyn Error>> {
     Ok(input)
 }
 
-fn _seperator(input: &str) {
-    //Maybe make an enum that has a tuple option that holds the numbers so that there can be a proper list of the numbers
-    let mut counter = 0;
-    let mut holder = String::new();
-    let mut list: Vec<String> = Vec::new();
-    for i in input.chars() {
-        if let '+' | '-' | '*' | 'x' | '^' | '/' | '%' | '!' | 'f' = i {
-            counter += 1;
-        }
-        if counter % 2 == 0 {
-            list.push(holder);
-            holder = String::new();
-            counter = 0;
-        } else {
-            holder.push(i);
-        }
-    }
-}
+// fn _seperator(input: &str) {
+//     //Maybe make an enum that has a tuple option that holds the numbers so that there can be a proper list of the numbers
+//     let mut counter = 0;
+//     let mut holder = String::new();
+//     let mut list: Vec<String> = Vec::new();
+//     for i in input.chars() {
+//         if let '+' | '-' | '*' | 'x' | '^' | '/' | '%' | '!' | 'f' = i {
+//             counter += 1;
+//         }
+//         if counter % 2 == 0 {
+//             list.push(holder);
+//             holder = String::new();
+//             counter = 0;
+//         } else {
+//             holder.push(i);
+//         }
+//     }
+// }

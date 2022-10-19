@@ -8,7 +8,7 @@ fn env_get() -> (Option<String>, bool) {
     let mut input: String = String::new();
     for i in args {
         if i != "debug" {
-            input.push_str(&i);
+            input += &i;
         } else {
             debug = true;
         }
@@ -24,17 +24,16 @@ fn main() {
     if let None = input {
         input = Some(get_input().unwrap_or_else(|err| CustomError::state_error(err)));
     }
-    let input = input.unwrap();
+    let input: String = input.unwrap();
     let mut data = Data::initalize(&input).unwrap_or_else(|err| CustomError::state_error(err));
 
     data.do_math()
         .unwrap_or_else(|err| CustomError::state_error(err));
 
     if debug {
-        println!("input: {}", input);
         println!(
-            "num 1: {}\nop: {}\nnum 2: {:?}",
-            data.num_1, data.operator, data.num_2
+            "input: {}\nnum 1: {}\nop: {}\nnum 2: {:?}",
+            input, data.num_1, data.operator, data.num_2
         );
     }
 
