@@ -8,7 +8,7 @@ pub struct Data {
     pub value: Option<f64>,
 }
 
-macro_rules! get_nums {
+macro_rules! _get_nums {
     ($($a:expr, $b:expr, $c:expr), *) => {
 		let mut list = Vec::new();
 		$(
@@ -154,7 +154,7 @@ pub fn get_input() -> Result<String, Box<dyn Error>> {
     Ok(input)
 }
 
-fn seperator(input: &str) {
+fn _seperator(input: &str) {
     //Maybe make an enum that has a tuple option that holds the numbers so that there can be a proper list of the numbers
     let mut counter = 0;
     let mut holder = String::new();

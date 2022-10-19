@@ -20,58 +20,33 @@ fn env_get() -> (Option<String>, bool) {
 }
 
 fn main() {
-    let (input, debug) = env_get();
-    if let Some(input) = input {
-        let mut data = Data::initalize(&input).unwrap_or_else(|err| CustomError::state_error(err));
+    let (mut input, debug) = env_get();
+    if let None = input {
+        input = Some(get_input().unwrap_or_else(|err| CustomError::state_error(err)));
+    }
+    let input = input.unwrap();
+    let mut data = Data::initalize(&input).unwrap_or_else(|err| CustomError::state_error(err));
 
-        data.do_math()
-            .unwrap_or_else(|err| CustomError::state_error(err));
+    data.do_math()
+        .unwrap_or_else(|err| CustomError::state_error(err));
 
-        if debug {
-            println!("input: {}", input);
-            println!(
-                "num 1: {}\nop: {}\nnum 2: {:?}",
-                data.num_1, data.operator, data.num_2
-            );
-        }
+    if debug {
+        println!("input: {}", input);
+        println!(
+            "num 1: {}\nop: {}\nnum 2: {:?}",
+            data.num_1, data.operator, data.num_2
+        );
+    }
 
-        if data.num_2.is_some() {
-            println!(
-                "{} {} {} = {}",
-                data.num_1,
-                data.operator,
-                data.num_2.unwrap(),
-                data.value.unwrap()
-            );
-        } else {
-            println!("{}{} = {}", data.operator, data.num_1, data.value.unwrap());
-        }
+    if data.num_2.is_some() {
+        println!(
+            "{} {} {} = {}",
+            data.num_1,
+            data.operator,
+            data.num_2.unwrap(),
+            data.value.unwrap()
+        );
     } else {
-        let input = get_input().unwrap_or_else(|err| CustomError::state_error(err));
-
-        let mut data = Data::initalize(&input).unwrap_or_else(|err| CustomError::state_error(err));
-
-        data.do_math()
-            .unwrap_or_else(|err| CustomError::state_error(err));
-
-        if env::var("debug").is_ok() {
-            println!("input: {}", input);
-            println!(
-                "num 1: {}\nop: {}\nnum 2: {:?}",
-                data.num_1, data.operator, data.num_2
-            );
-        }
-
-        if data.num_2.is_some() {
-            println!(
-                "{} {} {} = {}",
-                data.num_1,
-                data.operator,
-                data.num_2.unwrap(),
-                data.value.unwrap()
-            );
-        } else {
-            println!("{}{} = {}", data.operator, data.num_1, data.value.unwrap());
-        }
+        println!("{}{} = {}", data.operator, data.num_1, data.value.unwrap());
     }
 }
